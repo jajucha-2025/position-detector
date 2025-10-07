@@ -27,6 +27,16 @@ def _deriv(state, v, delta, L):
     return dx, dy, dtheta
 
 
+def pd_rk2(state, v, delta, L, dt):
+    x, y, theta = state
+    k1 = _deriv((x, y, theta), v, delta, L)
+    k2 = _deriv((x + 0.5*dt*k1[0], y + 0.5*dt*k1[1], theta + 0.5*dt*k1[2]), v, delta, L)
+    x_next = x + dt*k2[0]
+    y_next = y + dt*k2[1]
+    theta_next = theta + dt*k2[2]
+    theta_next = (theta_next + math.pi) % (2*math.pi) - math.pi
+    return (x_next, y_next, theta_next)
+
 def pd_rk4(state, v, delta, L, dt):
     """
     One RK4 step for better accuracy.
